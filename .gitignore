@@ -1,0 +1,32 @@
+/bin/
+/deploy/
+
+
+# VS Code
+.vscode/
+
+# Eclipse
+.project
+.metadata
+tmp/
+tmp/**/*
+*.tmp
+local.properties
+.classpath
+.settings/
+
+# Intellij
+.idea/
+classes/
+out/
+
+# Gradle
+.gradle/
+/build/
+
+# MacOS X
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini

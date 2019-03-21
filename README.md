@@ -12,3 +12,12 @@ This is a Spring demo project for learning purpose. Each branch represents a ste
 - async tasks
 - a real-world architecture using a data access layer, services, data transfer objects, entity-dto mappers, view data objects, etc.
 - websockets (TODO)
+
+
+## See what changed between two branches
+```
+git diff branch1..branch2
+```
+
+## History of spring and spring boot
+https://www.quickprogrammingtips.com/spring-boot/history-of-spring-framework-and-spring-boot.html

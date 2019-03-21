@@ -24,6 +24,9 @@ out/
 .gradle/
 /build/
 
+# Gradle wrapper
+!gradle/wrapper/gradle-wrapper.jar
+
 # MacOS X
 .DS_Store
 

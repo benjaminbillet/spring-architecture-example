@@ -1,0 +1,21 @@
+// use the java plugin
+plugins {
+  id 'java'
+}
+
+// apply the tasks defined in the java plugin
+apply plugin: 'java'
+
+// use maven central for downloading dependencies
+repositories {
+  mavenCentral()
+}
+
+// Java version compatibility
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+
+dependencies {
+  // put your dependencies here
+}

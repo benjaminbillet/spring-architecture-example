@@ -37,10 +37,16 @@ bootRun {
 }
 
 dependencies {
-  // this is the most basic starter, it defines a minimum set of dependencies to run a 
-  // standalone spring boot application: https://github.com/spring-projects/spring-boot/blob/2.1.x/spring-boot-project/spring-boot-starters/spring-boot-starter/pom.xml
-  implementation 'org.springframework.boot:spring-boot-starter'
+  // we use the spring web starter: https://github.com/spring-projects/spring-boot/blob/2.1.x/spring-boot-project/spring-boot-starters/spring-boot-starter-web/pom.xml
+  implementation 'org.springframework.boot:spring-boot-starter-web'
 
-  // many starters are available: https://github.com/spring-projects/spring-boot/tree/2.1.x/spring-boot-project/spring-boot-starters
-  // we will use many of them later
+
+  // jackson
+  implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc" // high performance collections
+  implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+  implementation "com.fasterxml.jackson.core:jackson-annotations"
+  implementation "com.fasterxml.jackson.core:jackson-databind"
+
+  // utils
+  implementation "org.apache.commons:commons-lang3"
 }

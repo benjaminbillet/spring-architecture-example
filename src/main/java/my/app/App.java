@@ -1,16 +1,19 @@
 package my.app;
 
-import java.util.Arrays;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.time.ZoneId;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
 
 import my.app.config.ApplicationProperties;
 
@@ -21,19 +24,65 @@ public class App {
 
 	private final Environment env;
 
-	// the environment and properties parameter will be injected by spring
-	public App(Environment env, ApplicationProperties properties) {
+	public App(Environment env) {
 		this.env = env;
-		log.info("The application properties: {}", properties);
 	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
 	}
 
 	@PostConstruct
 	public void initApplication() {
-		log.info("The application '{}' is running!", env.getProperty("spring.application.name"));
-		log.info("Application active profiles: {}", Arrays.asList(env.getActiveProfiles()));
-		log.info("Is application in dev: {}", env.acceptsProfiles(Profiles.of("dev", "development")));
+		// deal with a key store for https
+		String protocol = "http";
+		if (env.getProperty("server.ssl.key-store") != null) {
+				protocol = "https";
+		}
+
+		String appName = env.getProperty("spring.application.name", "<unamed>");
+
+		String serverPort = env.getProperty("server.port", "8080");
+		String serverHost = resolveServerHost();
+
+		String contextPath = env.getProperty("server.servlet.contextPath");
+		if (StringUtils.isBlank(contextPath)) {
+			contextPath = "/";
+		}
+
+		logAppInfo(appName, protocol, serverHost, serverPort, contextPath);
+	}
+
+	private String resolveServerHost() {
+		String host = "localhost";
+		try {
+			host = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			log.warn("The host name could not be determined, use localhost");
+		}
+		return host;
+	}
+
+	private void logAppInfo(String appName, String protocol, String hostName, String serverPort, String contextPath) {
+		log.info(
+			"\n======================================================\n" +
+			"Application '{}' is running\n" +
+			"- local access: \t{}://localhost:{}{}\n" +
+			"- external access: \t{}://{}:{}{}\n" +
+			"- locale: \t\t{}\n" +
+			"- timezone: \t\t{}\n" +
+			"- profiles: \t\t{}\n" +
+			"======================================================",
+			appName,
+			protocol,
+			serverPort,
+			contextPath,
+			protocol,
+			hostName,
+			serverPort,
+			contextPath,
+			Locale.getDefault(),
+			ZoneId.systemDefault(),
+			env.getActiveProfiles());
 	}
 }

@@ -1,15 +1,29 @@
-# JPA and Spring Data
+# Service
+A service is an annotated classes defined as “an operation offered as an interface that stands alone in the model, with no encapsulated state.”
+Here, we use them to create an intermediary layer between the REST layer (`my.app.api`) and the data access layer (`my.app.repository` and `my.app.domain`).
 
-[Java Persistence API](https://docs.oracle.com/javaee/7/tutorial/partpersist.htm#BNBPY) is a specification that describes the management of relational data:
-- describe entities (`my.app.domain` package), i.e., persistence domain objects representing tables.
-- create queries using [Java Persistence Query Language](https://docs.oracle.com/javaee/7/tutorial/persistence-querylanguage.htm#BNBTG)] and [Critera API](https://docs.oracle.com/javaee/7/tutorial/persistence-criteria.htm#GJITV)
+We also usually define the transactions at service level using [spring transactions](https://docs.spring.io/spring/docs/5.1.5.RELEASE/spring-framework-reference/data-access.html#transaction-declarative), based on the [Java Transaction API](https://docs.oracle.com/javaee/7/tutorial/transactions.htm#BNCIH). See also this small introduction: https://dzone.com/articles/how-does-spring-transactional
 
-JPA is only a specification, the implementation provided by the `spring-boot-starter-data-jpa` starter is [Hibernate](http://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html).
 
-[Spring data JPA](https://docs.spring.io/spring-data/data-jpa/docs/2.1.5.RELEASE/reference/html) provides repository support for JPA. [Repositories](https://docs.spring.io/spring-data/data-jpa/docs/2.1.5.RELEASE/reference/html/#repositories) are interfaces that are automatically implemented by Spring at runtime, based on the name of the repository methods. See `my.app.repository` for an example.
+# Data transfer objects
+DTOs are data objects (no business logic) used for transferring data between layers. Here, the DTO we built (`my.app.dto`) is quite straightforward (one to one mapping with an entity), but they can be used to flatten complex entity relations into a single object that can be used by the REST layer.
 
-Before running your application, make sure to create the `mydatabase` database (see `application-dev.properties` for configuration):
+# A small API
+In `my.app.api`, we designed a small Create-Retrieve-Update-Delete API:
 
 ```
-create database mydatabase character set utf8mb4 collate utf8mb4_bin;
+curl -v -X POST 'http://localhost:8080/api/public/resources' -H 'Content-type: application/json' -d '{"name":"Resource1","description":"Description of Resource1"}'
 ```
+
+```
+curl -v -X GET 'http://localhost:8080/api/public/resources/1'
+```
+
+```
+curl -v -X GET 'http://localhost:8080/api/public/resources'
+```
+
+Thanks to the use of a `Pageable`, the `GET api/public/resources` endpoint works with pagination and sorting for free using query parameters:
+- you can have several `sort` parameters, of the form `sort={attribute},{direction}` with direction (asc or desc) being optional (e.g., `?sort=name,desc&sort=id` )
+- by default a page is 20 elements, but you can set the page size explicitly: `?size={page size}&page={page number}`. The page number starts at 0.
+

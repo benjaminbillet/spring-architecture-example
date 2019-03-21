@@ -1,21 +1,41 @@
-// use the java plugin
 plugins {
   id 'java'
+  id 'org.springframework.boot' version '2.1.3.RELEASE' // the spring boot plugin
 }
 
 // apply the tasks defined in the java plugin
 apply plugin: 'java'
+
+// apply the spring/spring boot plugins 
+// (the io.spring.dependency-management plugin is a dependency of the org.springframework.boot plugin)
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
 
 // use maven central for downloading dependencies
 repositories {
   mavenCentral()
 }
 
+// a few informations about our application
+group = 'my.app'
+version = '0.0.1-SNAPSHOT'
+description = ''
+
 // Java version compatibility
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
+// the application entry point
+springBoot {
+  mainClassName = 'my.app.App'
+}
 
 dependencies {
-  // put your dependencies here
+  // this is the most basic starter, it defines a minimum set of dependencies to run a 
+  // standalone spring boot application: https://github.com/spring-projects/spring-boot/blob/2.1.x/spring-boot-project/spring-boot-starters/spring-boot-starter/pom.xml
+  implementation 'org.springframework.boot:spring-boot-starter'
+
+  // many starters are available: https://github.com/spring-projects/spring-boot/tree/2.1.x/spring-boot-project/spring-boot-starters
+  // we will use many of them later
 }

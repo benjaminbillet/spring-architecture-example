@@ -1,31 +1,12 @@
-# Gradle
+# Spring Boot
 
-Look at the commented build.gradle for the base concepts.
-- Learn the Gradle basics: https://docs.gradle.org/5.3/userguide/tutorial_using_tasks.html#learning-the-basics
-- Learn the specifics of Java compilation with Gradle: https://docs.gradle.org/5.3/userguide/building_java_projects.html#java-projects
+[Spring Boot[(https://docs.spring.io/spring-boot/docs/2.1.3.RELEASE/reference/htmlsingle)] enables you to create stand-alone Spring-based applications embedding their own application server.
 
+Look at what changed in build.gradle. By adding the [spring boot plugin](https://docs.spring.io/spring-boot/docs/2.1.3.RELEASE/gradle-plugin/reference/html), a new task (`./gradlew tasks`) is available: now, you can use `./gradlew bootRun` to start the application.
 
-## Few commands to start:
+Look at the source code of `src/main/java/my/app/App.java`, which is the main entry point of your application.
 
-Display the available tasks:
-
-```gradle tasks```
-
-
-Run the build task:
-
-```gradle build```
-
-Look in the build folder, a jar with a minimalistic `MANIFEST.MF` has been generated.
-
-
-# Gradlew
-The [Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) is a script that invokes a declared version of Gradle, downloading it beforehand if necessary.
-
-Generate the wrapper
-
-```gradle wrapper --gradle-version 5.3 --distribution-type all```
-
-Several files are generated:
-- `gradlew`, `gradlew.bat` are scripts for running gradle; instead of `gradle build`, try `./gradlew build`
-- `gradle/wrapper` folder contains the gradle jar and a `gradle-wrapper.properties` file (look at it, the url of the downloaded gradle is specified there)
+When your run the application using `./gradlew bootRun`, you should see the following line:
+```
+2018-01-21 07:53:56.362  INFO 14427 --- [main] my.app.App : My application is running!
+```

@@ -31,6 +31,11 @@ springBoot {
   mainClassName = 'my.app.App'
 }
 
+bootRun {
+  // if no SPRING_PROFILES_ACTIVE environment variable is set, the default will be local
+  environment SPRING_PROFILES_ACTIVE: environment.SPRING_PROFILES_ACTIVE ?: "local"
+}
+
 dependencies {
   // this is the most basic starter, it defines a minimum set of dependencies to run a 
   // standalone spring boot application: https://github.com/spring-projects/spring-boot/blob/2.1.x/spring-boot-project/spring-boot-starters/spring-boot-starter/pom.xml

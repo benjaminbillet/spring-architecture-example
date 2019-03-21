@@ -4,4 +4,4 @@
 
 - `App.java` updated to log useful informations at server startups
 - Jackson dependencies added to `build.gradle`
-- New configurations for new [date and time API](https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html), for Spring and Jackson (see `my.app.config` package).
+- Configuration for new [date and time API](https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html) for Jackson (see `my.app.config` package).

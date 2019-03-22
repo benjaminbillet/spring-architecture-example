@@ -1,25 +1,13 @@
 package my.app.dto;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
 
 import my.app.domain.PublicResource;
 
-// make the mapper injectable
-@Component
-public class PublicResourceMapper {
-  public PublicResourceDto toDto(PublicResource resource) {
-    PublicResourceDto dto = new PublicResourceDto();
-    dto.setId(resource.getId());
-    dto.setName(resource.getName());
-    dto.setDescription(resource.getDescription());
-    return dto;
-  }
+@Mapper(componentModel = "spring")
+public interface PublicResourceMapper extends EntityMapper<PublicResourceDto, PublicResource> {
 
-  public PublicResource toEntity(PublicResourceDto dto) {
-    PublicResource resource = new PublicResource();
-    resource.setId(dto.getId());
-    resource.setName(dto.getName());
-    resource.setDescription(dto.getDescription());
-    return resource;
-  }
+  PublicResourceDto toDto(PublicResource resource);
+
+  PublicResource toEntity(PublicResourceDto dto);
 }

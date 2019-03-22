@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import my.app.api.errors.BadRequestException;
+import my.app.api.errors.NotFoundException;
+import my.app.config.ApplicationProperties;
 import my.app.dto.PublicResourceDto;
 import my.app.service.PublicResourceService;
-import my.app.util.RestUtil;
 
 @RestController
 @RequestMapping("/api/public")
@@ -29,16 +31,18 @@ public class PublicResourceEndpoint {
   private final Logger log = LoggerFactory.getLogger(PublicResourceEndpoint.class);
 
   private final PublicResourceService publicResourceService;
+  private final ApplicationProperties config;
 
-  public PublicResourceEndpoint(PublicResourceService publicResourceService) {
+  public PublicResourceEndpoint(ApplicationProperties config, PublicResourceService publicResourceService) {
     this.publicResourceService = publicResourceService;
+    this.config = config;
   }
 
   @PostMapping("/resources")
   public ResponseEntity<PublicResourceDto> createPublicResource(@RequestBody PublicResourceDto dto) throws URISyntaxException {
     log.debug("POST /resources - {}", dto);
     if (dto.getId() != null) {
-      throw new IllegalArgumentException("A new resource cannot already have an id");
+      throw new BadRequestException(config, "A new resource cannot already have an ID", PublicResourceDto.ENTITY_NAME, "id-provided");
     }
     PublicResourceDto result = publicResourceService.save(dto);
     return ResponseEntity.created(new URI("/api/public/resources/" + result.getId())).body(result);
@@ -48,7 +52,7 @@ public class PublicResourceEndpoint {
   public ResponseEntity<PublicResourceDto> updatePublicResource(@RequestBody PublicResourceDto dto) throws URISyntaxException {
     log.debug("PUT /resources - {}", dto);
     if (dto.getId() == null) {
-      throw new IllegalArgumentException("Invalid resource id");
+      throw new BadRequestException(config, "Invalid resource ID", PublicResourceDto.ENTITY_NAME, "id-null");
     }
     PublicResourceDto result = publicResourceService.save(dto);
     return ResponseEntity.ok(result);
@@ -65,7 +69,7 @@ public class PublicResourceEndpoint {
   public ResponseEntity<PublicResourceDto> getPublicResource(@PathVariable Long id) {
     log.debug("GET /resources/{}", id);
     Optional<PublicResourceDto> dto = publicResourceService.findOne(id);
-    return RestUtil.toResponseEntity(dto);
+    return ResponseEntity.ok(dto.orElseThrow(() -> new NotFoundException(config, "Invalid resource ID", PublicResourceDto.ENTITY_NAME, "not-found")));
   }
 
   @DeleteMapping("/resources/{id}")

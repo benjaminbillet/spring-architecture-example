@@ -7,6 +7,8 @@ public class PublicResourceDto implements Serializable {
 
   private static final long serialVersionUID = -4155145456448846329L;
 
+  public static final String ENTITY_NAME = "public-resource";
+
   private Long id;
 
   private String name;

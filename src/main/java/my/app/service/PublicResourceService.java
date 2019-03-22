@@ -4,12 +4,14 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import my.app.domain.PublicResource;
 import my.app.dto.PublicResourceDto;
 import my.app.dto.PublicResourceMapper;
 import my.app.repository.PublicResourceRepository;
+import my.app.vdo.filter.PublicResourceFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +46,15 @@ public class PublicResourceService {
     return resourceRepository.findAll(pageable)
       .map(resourceMapper::toDto);
   }
+
+  @Transactional(readOnly = true)
+  public Page<PublicResourceDto> findAll(PublicResourceFilter filter, Pageable pageable) {
+    log.info("Request to filter PublicResources: {}", filter);
+    Specification<PublicResource> specification = filter.toSpecification();
+    return resourceRepository.findAll(specification, pageable)
+      .map(resourceMapper::toDto);
+  }
+
 
   @Transactional(readOnly = true)
   public Optional<PublicResourceDto> findOne(Long id) {

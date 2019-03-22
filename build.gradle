@@ -68,6 +68,10 @@ dependencies {
   implementation "org.mapstruct:mapstruct-jdk8:${mapstructVersion}"
   annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
+  // Hibernate JPA Model generator
+  annotationProcessor 'javax.xml.bind:jaxb-api' // https://stackoverflow.com/a/52835834
+  annotationProcessor 'org.hibernate:hibernate-jpamodelgen'  
+
   // https://tools.ietf.org/html/rfc7807 implementation
   implementation "org.zalando:problem-spring-web:${problemSpringWebVersion}"
 

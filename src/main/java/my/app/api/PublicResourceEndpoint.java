@@ -24,6 +24,7 @@ import my.app.api.errors.NotFoundException;
 import my.app.config.ApplicationProperties;
 import my.app.dto.PublicResourceDto;
 import my.app.service.PublicResourceService;
+import my.app.vdo.filter.PublicResourceFilter;
 
 @RestController
 @RequestMapping("/api/public")
@@ -59,9 +60,9 @@ public class PublicResourceEndpoint {
   }
 
   @GetMapping("/resources")
-  public ResponseEntity<List<PublicResourceDto>> getAllPublicResources(Pageable pageable) {
-    log.debug("GET /resources - {}", pageable);
-    Page<PublicResourceDto> page = publicResourceService.findAll(pageable);
+  public ResponseEntity<List<PublicResourceDto>> getAllPublicResources(PublicResourceFilter filter, Pageable pageable) {
+    log.debug("GET /resources - filter={} pageable={}", filter, pageable);
+    Page<PublicResourceDto> page = publicResourceService.findAll(filter, pageable);
     return ResponseEntity.ok(page.getContent());
   }
 

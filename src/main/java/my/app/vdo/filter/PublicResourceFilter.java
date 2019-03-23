@@ -31,7 +31,7 @@ public class PublicResourceFilter implements Serializable {
   }
 
   public Specification<PublicResource> toSpecification() {
-    Specification<PublicResource> specification = Specification.where(null);
+    Specification<PublicResource> specification = Specification.where(null); //NOSONAR
     FilterMapper<PublicResource> mapper = new FilterMapper<>();
     if (getName() != null) {
       specification = specification.and(mapper.buildStringFilterSpecification(getName(), PublicResource_.name));

@@ -31,7 +31,7 @@ public class ExceptionTranslator implements ProblemHandling {
     }
 
     Problem problem = entity.getBody();
-    if ((problem instanceof DefaultProblem) == false) {
+    if (!(problem instanceof DefaultProblem)) {
       return entity;
     }
 

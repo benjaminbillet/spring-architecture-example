@@ -2,6 +2,7 @@ plugins {
   id 'java'
   id 'org.springframework.boot' version '2.1.3.RELEASE' // the spring boot plugin
   id 'net.ltgt.apt' version '0.21' // an annotation processor used for mapstruct
+  id 'org.sonarqube' version '2.7' // static code analyzer
 }
 
 // apply the tasks defined in the java plugin
@@ -12,6 +13,8 @@ apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
+// apply sub-file
+apply from: 'sonar.gradle'
 
 // use maven central for downloading dependencies
 repositories {

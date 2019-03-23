@@ -186,10 +186,9 @@ public class User implements Serializable {
 
   @Override
   public String toString() {
-    return "{" + " id='" + getId() + "'" + ", login='" + getLogin() + "'" + ", password='*********'"
-        + ", firstName='" + getFirstName() + "'" + ", lastName='" + getLastName() + "'" + ", email='" + getEmail() + "'"
-        + ", activated='" + getActivated() + "'" + ", activationKey='" + getActivationKey() + "'" + ", authorities='"
-        + getAuthorities() + "'" + "}";
+    return "{" + " id='" + getId() + "'" + ", login='" + getLogin() + "'" + ", firstName='" + getFirstName() + "'"
+        + ", lastName='" + getLastName() + "'" + ", email='" + getEmail() + "'" + ", activated='" + getActivated() + "'"
+        + ", activationKey='" + getActivationKey() + "'" + ", authorities='" + getAuthorities() + "'" + "}";
   }
 
 }

@@ -3,6 +3,7 @@ package my.app.config;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 // every key that starts with "myapp" in the application properties and matches the attributes of this class will be injected automatically
@@ -51,7 +52,7 @@ public class ApplicationProperties {
 
     public URI getDefaultTypeUri() {
       try {
-        return new URI(getProblemBaseUrl() + "/" + getDefaultType());
+        return new URI(StringUtils.joinWith("/", getProblemBaseUrl(), getDefaultType()));
       } catch (URISyntaxException e) {
         throw new RuntimeException(e);
       }
@@ -67,7 +68,7 @@ public class ApplicationProperties {
 
     public URI getEntityNotFoundTypeUri() {
       try {
-        return new URI(getProblemBaseUrl() + "/" + getEntityNotFoundType());
+        return new URI(StringUtils.joinWith("/", getProblemBaseUrl(), getEntityNotFoundType()));
       } catch (URISyntaxException e) {
         throw new RuntimeException(e);
       }
@@ -83,7 +84,7 @@ public class ApplicationProperties {
 
     public URI getConstraintViolationTypeUri() {
       try {
-        return new URI(getProblemBaseUrl() + "/" + getConstraintViolationType());
+        return new URI(StringUtils.joinWith("/", getProblemBaseUrl(), getConstraintViolationType()));
       } catch (URISyntaxException e) {
         throw new RuntimeException(e);
       }
@@ -99,7 +100,7 @@ public class ApplicationProperties {
 
     public URI getLoginAlreadyUsedTypeUri() {
       try {
-        return new URI(getProblemBaseUrl() + "/" + getLoginAlreadyUsedType());
+        return new URI(StringUtils.joinWith("/", getProblemBaseUrl(), getLoginAlreadyUsedType()));
       } catch (URISyntaxException e) {
         throw new RuntimeException(e);
       }
@@ -115,7 +116,7 @@ public class ApplicationProperties {
 
     public URI getEmailAlreadyUsedTypeUri() {
       try {
-        return new URI(getProblemBaseUrl() + "/" + getEmailAlreadyUsedType());
+        return new URI(StringUtils.joinWith("/", getProblemBaseUrl(), getEmailAlreadyUsedType()));
       } catch (URISyntaxException e) {
         throw new RuntimeException(e);
       }
@@ -131,7 +132,7 @@ public class ApplicationProperties {
 
     public URI getInvalidPasswordTypeUri() {
       try {
-        return new URI(getProblemBaseUrl() + "/" + getInvalidPasswordType());
+        return new URI(StringUtils.joinWith("/", getProblemBaseUrl(), getInvalidPasswordType()));
       } catch (URISyntaxException e) {
         throw new RuntimeException(e);
       }

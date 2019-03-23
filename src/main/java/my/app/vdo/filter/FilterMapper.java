@@ -55,7 +55,7 @@ public class FilterMapper<T> {
       return getValueInSpecification(supplier, filter.getIn());
     }
 
-    Specification<T> result = Specification.where(null);
+    Specification<T> result = Specification.where(null); //NOSONAR
     if (filter.isEmpty() != null) {
       result = result.and(getEmptySpecification(supplier, filter.isEmpty()));
     }

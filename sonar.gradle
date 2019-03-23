@@ -1,0 +1,24 @@
+apply plugin: 'org.sonarqube'
+
+sonarqube {
+  properties {
+    property "sonar.host.url", "http://localhost:9000"
+
+    property "sonar.issue.ignore.multicriteria", "S00112,S1948,MaximumInheritanceDepth"
+
+    // disable Generic exceptions should never be thrown
+    property "sonar.issue.ignore.multicriteria.S00112.resourceKey", "src/main/java/**/*"
+    property "sonar.issue.ignore.multicriteria.S00112.ruleKey", "squid:S00112"
+
+    // disable Fields in a "Serializable" class should either be transient or serializable (a JPA-managed field cannot be transient)
+    property "sonar.issue.ignore.multicriteria.S1948.resourceKey", "src/main/java/**/*"
+    property "sonar.issue.ignore.multicriteria.S1948.ruleKey", "squid:S1948"
+
+    property "sonar.issue.ignore.multicriteria.MaximumInheritanceDepth.resourceKey", "src/main/java/**/*"
+    property "sonar.issue.ignore.multicriteria.MaximumInheritanceDepth.ruleKey", "squid:MaximumInheritanceDepth"
+  
+
+    property "sonar.sources", "${project.projectDir}/src/main/"
+    property "sonar.tests", "${project.projectDir}/src/test/"
+  }
+}

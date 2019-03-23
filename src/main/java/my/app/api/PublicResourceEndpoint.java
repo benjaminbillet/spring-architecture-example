@@ -50,7 +50,7 @@ public class PublicResourceEndpoint {
   }
 
   @PutMapping("/resources")
-  public ResponseEntity<PublicResourceDto> updatePublicResource(@RequestBody PublicResourceDto dto) throws URISyntaxException {
+  public ResponseEntity<PublicResourceDto> updatePublicResource(@RequestBody PublicResourceDto dto) {
     log.debug("PUT /resources - {}", dto);
     if (dto.getId() == null) {
       throw new BadRequestException(config, "Invalid resource ID", PublicResourceDto.ENTITY_NAME, "id-null");

@@ -27,6 +27,6 @@ public interface UserMapper extends EntityMapper<UserDto, User> {
   }
 
   default Set<String> authoritiesToString(Set<Authority> authorities) {
-    return authorities.stream().map(authority -> authority.getName()).collect(Collectors.toSet());
+    return authorities.stream().map(Authority::getName).collect(Collectors.toSet());
   }
 }

@@ -46,7 +46,6 @@ public class LoginVdo {
   public String toString() {
     return "{" +
       " username='" + getUsername() + "'" +
-      ", password='********'" +
       ", rememberMe='" + isRememberMe() + "'" +
       "}";
   }

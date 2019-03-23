@@ -1,6 +1,6 @@
 /bin/
 /deploy/
-
+*.hprof
 
 # VS Code
 .vscode/

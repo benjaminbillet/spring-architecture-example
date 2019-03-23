@@ -11,6 +11,8 @@ import my.app.util.AuthUtil;
 
 public class UserDto {
 
+  public static final String ENTITY_NAME = "user";
+
   private Long id;
 
   @NotBlank

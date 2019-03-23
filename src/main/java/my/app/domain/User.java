@@ -183,12 +183,19 @@ public class User implements Serializable {
   public int hashCode() {
     return Objects.hash(id);
   }
-
+  
   @Override
   public String toString() {
-    return "{" + " id='" + getId() + "'" + ", login='" + getLogin() + "'" + ", firstName='" + getFirstName() + "'"
-        + ", lastName='" + getLastName() + "'" + ", email='" + getEmail() + "'" + ", activated='" + getActivated() + "'"
-        + ", activationKey='" + getActivationKey() + "'" + ", authorities='" + getAuthorities() + "'" + "}";
+    return "{" +
+      " id='" + getId() + "'" +
+      ", createdDate='" + getCreatedDate() + "'" +
+      ", login='" + getLogin() + "'" +
+      ", firstName='" + getFirstName() + "'" +
+      ", lastName='" + getLastName() + "'" +
+      ", email='" + getEmail() + "'" +
+      ", activated='" + getActivated() + "'" +
+      ", activationKey='" + getActivationKey() + "'" +
+      ", authorities='" + getAuthorities() + "'" +
+      "}";
   }
-
 }

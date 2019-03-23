@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import my.app.api.errors.BadRequestException;
 import my.app.api.errors.InternalServerErrorException;
 import my.app.api.errors.InvalidPasswordException;
 import my.app.config.ApplicationProperties;
@@ -34,6 +35,9 @@ public class AccountEndpoint {
   @PostMapping("/register")
   @ResponseStatus(HttpStatus.CREATED)
   public void registerAccount(@Valid @RequestBody UserVdo vdo) {
+    if (vdo.getId() != null) {
+      throw new BadRequestException(config, "A new resource cannot already have an ID", UserDto.ENTITY_NAME, "id-provided");
+    }
     if (!AuthUtil.checkPasswordLength(vdo.getPassword())) {
       throw new InvalidPasswordException(config);
     }

@@ -1,4 +1,15 @@
 apply plugin: 'org.sonarqube'
+apply plugin: 'jacoco'
+
+jacoco {
+  toolVersion = '0.8.3'
+}
+
+jacocoTestReport {
+  reports {
+    xml.enabled true
+  }
+}
 
 sonarqube {
   properties {
@@ -16,9 +27,15 @@ sonarqube {
 
     property "sonar.issue.ignore.multicriteria.MaximumInheritanceDepth.resourceKey", "src/main/java/**/*"
     property "sonar.issue.ignore.multicriteria.MaximumInheritanceDepth.ruleKey", "squid:MaximumInheritanceDepth"
-  
 
     property "sonar.sources", "${project.projectDir}/src/main/"
     property "sonar.tests", "${project.projectDir}/src/test/"
+
+
+    // jacoco config
+    property "sonar.jacoco.reportPaths", "${project.buildDir}/jacoco/test.exec"
+    property "sonar.java.codeCoveragePlugin", "jacoco"
+    property "sonar.junit.reportPaths", "${project.buildDir}/test-results"
+
   }
 }

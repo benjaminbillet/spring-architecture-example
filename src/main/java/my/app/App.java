@@ -12,13 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
 
 import my.app.config.ApplicationProperties;
 
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class }) // we will re-enable spring security later
+@SpringBootApplication
 @EnableConfigurationProperties(ApplicationProperties.class)
 public class App {
 	private static final Logger log = LoggerFactory.getLogger(App.class);

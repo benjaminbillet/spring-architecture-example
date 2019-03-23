@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "myapp", ignoreUnknownFields = true)
 public class ApplicationProperties {
   private Rfc7807 rfc7807;
+  private Jwt jwt;
 
   public Rfc7807 getRfc7807() {
     return this.rfc7807;
@@ -18,11 +19,23 @@ public class ApplicationProperties {
     this.rfc7807 = rfc7807;
   }
 
+  public Jwt getJwt() {
+    return this.jwt;
+  }
+
+  public void setJwt(Jwt jwt) {
+    this.jwt = jwt;
+  }
+
+
   public static class Rfc7807 {
     private String problemBaseUrl;
     private String defaultType;
     private String entityNotFoundType;
     private String constraintViolationType;
+    private String loginAlreadyUsedType;
+    private String emailAlreadyUsedType;
+    private String invalidPasswordType;
 
     public String getProblemBaseUrl() {
       return problemBaseUrl;
@@ -78,6 +91,84 @@ public class ApplicationProperties {
 
     public void setConstraintViolationType(String constraintViolationType) {
       this.constraintViolationType = constraintViolationType;
+    }
+
+    public String getLoginAlreadyUsedType() {
+      return this.loginAlreadyUsedType;
+    }
+
+    public URI getLoginAlreadyUsedTypeUri() {
+      try {
+        return new URI(getProblemBaseUrl() + "/" + getLoginAlreadyUsedType());
+      } catch (URISyntaxException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    public void setLoginAlreadyUsedType(String loginAlreadyUsedType) {
+      this.loginAlreadyUsedType = loginAlreadyUsedType;
+    }
+
+    public String getEmailAlreadyUsedType() {
+      return this.emailAlreadyUsedType;
+    }
+
+    public URI getEmailAlreadyUsedTypeUri() {
+      try {
+        return new URI(getProblemBaseUrl() + "/" + getEmailAlreadyUsedType());
+      } catch (URISyntaxException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    public void setEmailAlreadyUsedType(String emailAlreadyUsedType) {
+      this.emailAlreadyUsedType = emailAlreadyUsedType;
+    }
+
+    public String getInvalidPasswordType() {
+      return this.invalidPasswordType;
+    }
+
+    public URI getInvalidPasswordTypeUri() {
+      try {
+        return new URI(getProblemBaseUrl() + "/" + getInvalidPasswordType());
+      } catch (URISyntaxException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    public void setInvalidPasswordType(String invalidPasswordType) {
+      this.invalidPasswordType = invalidPasswordType;
+    }
+  }
+
+  public static class Jwt {
+    private String secretBase64;
+    private Integer tokenValiditySeconds;
+    private Integer tokenValidityRememberMeSeconds;
+
+    public String getSecretBase64() {
+      return this.secretBase64;
+    }
+  
+    public void setSecretBase64(String secretBase64) {
+      this.secretBase64 = secretBase64;
+    }
+  
+    public Integer getTokenValiditySeconds() {
+      return this.tokenValiditySeconds;
+    }
+  
+    public void setTokenValiditySeconds(Integer tokenValiditySeconds) {
+      this.tokenValiditySeconds = tokenValiditySeconds;
+    }
+  
+    public Integer getTokenValidityRememberMeSeconds() {
+      return this.tokenValidityRememberMeSeconds;
+    }
+  
+    public void setTokenValidityRememberMeSeconds(Integer tokenValidityRememberMeSeconds) {
+      this.tokenValidityRememberMeSeconds = tokenValidityRememberMeSeconds;
     }
   }
 }

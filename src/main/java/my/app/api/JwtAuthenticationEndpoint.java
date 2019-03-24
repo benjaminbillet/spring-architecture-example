@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.micrometer.core.annotation.Timed;
 import my.app.auth.JwtToken;
 import my.app.auth.JwtTokenProvider;
 import my.app.vdo.LoginVdo;
@@ -32,6 +33,7 @@ public class JwtAuthenticationEndpoint {
   }
 
   @PostMapping("/authenticate")
+  @Timed
   public ResponseEntity<JwtToken> authorize(@Valid @RequestBody LoginVdo vdo) {
     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
         vdo.getUsername(), vdo.getPassword());

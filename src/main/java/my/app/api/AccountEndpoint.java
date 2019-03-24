@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.micrometer.core.annotation.Timed;
 import my.app.api.errors.BadRequestException;
 import my.app.api.errors.InternalServerErrorException;
 import my.app.api.errors.InvalidPasswordException;
@@ -34,6 +35,7 @@ public class AccountEndpoint {
 
   @PostMapping("/register")
   @ResponseStatus(HttpStatus.CREATED)
+  @Timed
   public void registerAccount(@Valid @RequestBody UserVdo vdo) {
     if (vdo.getId() != null) {
       throw new BadRequestException(config, "A new resource cannot already have an ID", UserDto.ENTITY_NAME, "id-provided");
@@ -45,6 +47,7 @@ public class AccountEndpoint {
   }
 
   @GetMapping("/activate")
+  @Timed
   public void activateAccount(@RequestParam(value = "key") String key) {
     if (!userService.activateRegistration(key)) {
       throw new InternalServerErrorException(config, "No user was found for this activation key");
@@ -52,6 +55,7 @@ public class AccountEndpoint {
   }
 
   @GetMapping("/account")
+  @Timed
   public UserDto getAccount() {
     return userService.getUserWithAuthorities()
         .orElseThrow(() -> new InternalServerErrorException(config, "User could not be found"));

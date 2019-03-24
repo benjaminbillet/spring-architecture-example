@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.micrometer.core.annotation.Timed;
 import my.app.api.errors.BadRequestException;
 import my.app.api.errors.NotFoundException;
 import my.app.config.ApplicationProperties;
@@ -40,6 +41,7 @@ public class PublicResourceEndpoint {
   }
 
   @PostMapping("/resources")
+  @Timed
   public ResponseEntity<PublicResourceDto> createPublicResource(@RequestBody PublicResourceDto dto) throws URISyntaxException {
     log.debug("POST /resources - {}", dto);
     if (dto.getId() != null) {
@@ -50,6 +52,7 @@ public class PublicResourceEndpoint {
   }
 
   @PutMapping("/resources")
+  @Timed
   public ResponseEntity<PublicResourceDto> updatePublicResource(@RequestBody PublicResourceDto dto) {
     log.debug("PUT /resources - {}", dto);
     if (dto.getId() == null) {
@@ -60,6 +63,7 @@ public class PublicResourceEndpoint {
   }
 
   @GetMapping("/resources")
+  @Timed
   public ResponseEntity<List<PublicResourceDto>> getAllPublicResources(PublicResourceFilter filter, Pageable pageable) {
     log.debug("GET /resources - filter={} pageable={}", filter, pageable);
     Page<PublicResourceDto> page = publicResourceService.findAll(filter, pageable);
@@ -74,6 +78,7 @@ public class PublicResourceEndpoint {
   }
 
   @DeleteMapping("/resources/{id}")
+  @Timed
   public ResponseEntity<Void> deletePublicResource(@PathVariable Long id) {
     log.debug("DELETE /resources/{}", id);
     publicResourceService.delete(id);

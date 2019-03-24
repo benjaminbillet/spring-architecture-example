@@ -11,8 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name = "public_resource")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PublicResource implements Serializable {
 
   private static final long serialVersionUID = -582783504623216893L;

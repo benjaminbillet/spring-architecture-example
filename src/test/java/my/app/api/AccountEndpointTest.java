@@ -10,10 +10,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -61,6 +63,14 @@ public class AccountEndpointTest {
   @Autowired
   private ExceptionTranslator exceptionTranslator;
 
+  @Autowired
+  private CacheManager cacheManager;
+
+  @Before
+  public void setup() {
+    // clear all caches
+    cacheManager.getCacheNames().stream().forEach(cacheName -> cacheManager.getCache(cacheName).clear());
+  }
 
   @Test
   @Transactional
@@ -92,7 +102,7 @@ public class AccountEndpointTest {
     assertThat(user.getLastName()).isEqualTo(UserTestUtil.JOHNDOE_LASTNAME);
     assertThat(user.getEmail()).isEqualTo(UserTestUtil.JOHNDOE_EMAIL);
     assertThat(user.getActivated()).isFalse();
-    assertThat(user.getAuthorities()).isEmpty();
+    assertThat(user.getAuthorities()).containsExactly(Authority.of(AuthUtil.USER));
   }
 
   @Test
@@ -121,7 +131,7 @@ public class AccountEndpointTest {
   @Test
   @Transactional
   public void restRegisterWithExistingUser() throws Exception {
-    userRepository.saveAndFlush(UserTestUtil.createJohnDoe());
+    userRepository.saveAndFlush(UserTestUtil.createJohnDoe(null));
     int nbUsersBefore = userRepository.findAll().size();
 
     UserVdo vdo = new UserVdo();
@@ -143,7 +153,7 @@ public class AccountEndpointTest {
   @Test
   @Transactional
   public void testRegisterWithExistingMail() throws Exception {
-    userRepository.saveAndFlush(UserTestUtil.createJohnDoe());
+    userRepository.saveAndFlush(UserTestUtil.createJohnDoe(null));
     int nbUsersBefore = userRepository.findAll().size();
 
     UserVdo vdo = new UserVdo();
@@ -167,7 +177,7 @@ public class AccountEndpointTest {
   @Test
   @Transactional
   public void testActivate() throws Exception {
-    User user = UserTestUtil.createJohnDoe();
+    User user = UserTestUtil.createJohnDoe(null);
     user.setActivated(false);
     user.setActivationKey(RandomStringUtils.random(20));
     userRepository.saveAndFlush(user);
@@ -182,7 +192,7 @@ public class AccountEndpointTest {
   @Test
   @Transactional
   public void testActivateWrongKey() throws Exception {
-    User user = UserTestUtil.createJohnDoe();
+    User user = UserTestUtil.createJohnDoe(null);
     user.setActivated(false);
     user.setActivationKey(RandomStringUtils.random(20));
     userRepository.saveAndFlush(user);
@@ -213,16 +223,14 @@ public class AccountEndpointTest {
     assertThat(user.getCreatedDate()).isNotNull();
     assertThat(user.getId()).isEqualTo(null); // the mapper ignore activated
     assertThat(user.getActivated()).isEqualTo(false); // the mapper ignore activated
-    assertThat(user.getAuthorities()).isEmpty();  // the mapper ignore authorities
+    assertThat(user.getAuthorities()).isEmpty(); // the mapper ignore authorities
   }
 
   @Test
   public void testUserEntityToDto() {
-    User user = UserTestUtil.createJohnDoe();
+    User user = UserTestUtil.createJohnDoe(null);
     user.setId(1L);
     user.setCreatedDate(Instant.now());
-    user.setActivated(true);
-    user.setAuthorities(Collections.singleton(Authority.of(AuthUtil.USER)));
 
     UserDto dto = userMapper.toDto(user);
     assertThat(dto.getId()).isEqualTo(1L);

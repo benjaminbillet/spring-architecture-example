@@ -1,17 +1,22 @@
 package my.app.domain;
 
+import java.io.Serializable;
+import java.util.Objects;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Objects;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 // authority = a spring security role
 @Entity
 @Table(name = "authority")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Authority implements Serializable {
   private static final long serialVersionUID = 1311098324949590322L;
 

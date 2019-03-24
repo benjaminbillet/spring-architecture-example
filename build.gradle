@@ -63,6 +63,11 @@ dependencies {
   // mariadb client
   implementation 'org.mariadb.jdbc:mariadb-java-client'
 
+  // caching
+  implementation 'javax.cache:cache-api'
+  implementation 'org.ehcache:ehcache'
+  implementation "org.hibernate:hibernate-jcache"
+
   // jackson
   implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc" // high performance collections
   implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"

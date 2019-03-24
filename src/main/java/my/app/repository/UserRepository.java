@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import my.app.domain.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCache {
   Optional<User> findOneByActivationKey(String activationKey);
 
   List<User> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
@@ -24,12 +24,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   @EntityGraph(attributePaths = "authorities")
   Optional<User> findOneWithAuthoritiesById(Long id);
-
-  @EntityGraph(attributePaths = "authorities")
-  Optional<User> findOneWithAuthoritiesByLogin(String login);
-
-  @EntityGraph(attributePaths = "authorities")
-  Optional<User> findOneWithAuthoritiesByEmail(String email);
 
   Page<User> findAllByLoginNot(Pageable pageable, String login);
 }

@@ -3,11 +3,13 @@ package my.app.service;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,13 +42,16 @@ public class UserService {
 
   private final ApplicationProperties config;
 
+  private final CacheManager cacheManager;
+
   public UserService(ApplicationProperties config, UserRepository userRepository, UserMapper userMapper,
-      AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder) {
+      AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder, CacheManager cacheManager) {
     this.config = config;
     this.userRepository = userRepository;
     this.userMapper = userMapper;
     this.passwordEncoder = passwordEncoder;
     this.authorityRepository = authorityRepository;
+    this.cacheManager = cacheManager;
   }
 
   public boolean activateRegistration(String key) {
@@ -55,6 +60,7 @@ public class UserService {
     if (user.isPresent()) {
       user.get().setActivated(true);
       user.get().setActivationKey(null);
+      this.clearUserCaches(user.get());
       log.debug("Activated user: {}", user);
       return true;
     }
@@ -89,6 +95,7 @@ public class UserService {
     newUser.setAuthorities(authorities);
 
     userRepository.save(newUser);
+    this.clearUserCaches(newUser);
     log.debug("Created new user: {}", newUser);
     return true;
   }
@@ -99,12 +106,14 @@ public class UserService {
     }
     userRepository.delete(existingUser);
     userRepository.flush();
+    this.clearUserCaches(existingUser);
     return true;
   }
 
   public void deleteUser(String login) {
     userRepository.findOneByLogin(login).ifPresent(user -> {
       userRepository.delete(user);
+      this.clearUserCaches(user);
       log.debug("Deleted User: {}", user);
     });
   }
@@ -112,6 +121,11 @@ public class UserService {
   @Transactional(readOnly = true)
   public Optional<UserDto> getUserWithAuthoritiesByLogin(String login) {
     return userRepository.findOneWithAuthoritiesByLogin(login).map(userMapper::toDto);
+  }
+
+  @Transactional(readOnly = true)
+  public Optional<UserDto> getUserWithAuthoritiesByEmail(String email) {
+    return userRepository.findOneWithAuthoritiesByEmail(email).map(userMapper::toDto);
   }
 
   @Transactional(readOnly = true)
@@ -132,6 +146,12 @@ public class UserService {
         .forEach(user -> {
           log.debug("Deleting not activated user {}", user.getLogin());
           userRepository.delete(user);
+          this.clearUserCaches(user);
         });
+  }
+
+  private void clearUserCaches(User user) {
+    Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
+    Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
   }
 }

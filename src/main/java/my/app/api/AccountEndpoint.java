@@ -16,7 +16,9 @@ import my.app.api.errors.BadRequestException;
 import my.app.api.errors.InternalServerErrorException;
 import my.app.api.errors.InvalidPasswordException;
 import my.app.config.ApplicationProperties;
+import my.app.domain.User;
 import my.app.dto.UserDto;
+import my.app.service.MailService;
 import my.app.service.UserService;
 import my.app.util.AuthUtil;
 import my.app.vdo.UserVdo;
@@ -28,9 +30,12 @@ public class AccountEndpoint {
 
   private final ApplicationProperties config;
 
-  public AccountEndpoint(ApplicationProperties config, UserService userService) {
+  private final MailService mailService;
+
+  public AccountEndpoint(ApplicationProperties config, UserService userService, MailService mailService) {
     this.config = config;
     this.userService = userService;
+    this.mailService = mailService;
   }
 
   @PostMapping("/register")
@@ -43,7 +48,10 @@ public class AccountEndpoint {
     if (!AuthUtil.checkPasswordLength(vdo.getPassword())) {
       throw new InvalidPasswordException(config);
     }
-    userService.registerUser(vdo, vdo.getPassword());
+    User user = userService.registerUser(vdo, vdo.getPassword());
+    if (config.isMailEnabled()) {
+      mailService.sendActivationEmail(user);
+    }
   }
 
   @GetMapping("/activate")

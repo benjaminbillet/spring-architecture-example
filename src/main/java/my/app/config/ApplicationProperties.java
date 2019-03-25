@@ -14,6 +14,9 @@ public class ApplicationProperties {
   private Rfc7807 rfc7807 = new Rfc7807();
   private Jwt jwt = new Jwt();
   private Http http = new Http();
+  private AsyncPool asyncPool = new AsyncPool();
+
+  private boolean mailEnabled = false;
 
   public Rfc7807 getRfc7807() {
     return this.rfc7807;
@@ -37,6 +40,26 @@ public class ApplicationProperties {
 
   public void setHttp(Http http) {
     this.http = http;
+  }
+
+  public AsyncPool getAsyncPool() {
+    return this.asyncPool;
+  }
+
+  public void setAsyncPool(AsyncPool asyncPool) {
+    this.asyncPool = asyncPool;
+  }
+
+  public boolean isMailEnabled() {
+    return this.mailEnabled;
+  }
+
+  public boolean getMailEnabled() {
+    return this.mailEnabled;
+  }
+
+  public void setMailEnabled(boolean mailEnabled) {
+    this.mailEnabled = mailEnabled;
   }
 
 
@@ -215,6 +238,36 @@ public class ApplicationProperties {
   
     public void setCacheHeadersEnabled(boolean cacheHeadersEnabled) {
       this.cacheHeadersEnabled = cacheHeadersEnabled;
+    }
+  }
+
+  public static class AsyncPool {
+    private int coreSize = 2;
+    private int maxSize = 32;
+    private int queueSize = 8192;
+
+    public int getCoreSize() {
+      return coreSize;
+    }
+
+    public void setCoreSize(int coreSize) {
+      this.coreSize = coreSize;
+    }
+
+    public int getMaxSize() {
+      return maxSize;
+    }
+
+    public void setMaxSize(int maxSize) {
+      this.maxSize = maxSize;
+    }
+
+    public int getQueueSize() {
+      return queueSize;
+    }
+
+    public void setQueueSize(int queueSize) {
+      this.queueSize = queueSize;
     }
   }
 }

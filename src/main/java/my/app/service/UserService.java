@@ -75,7 +75,7 @@ public class UserService {
     return false;
   }
 
-  public boolean registerUser(UserDto dto, String password) {
+  public User registerUser(UserDto dto, String password) {
     userRepository.findOneByLogin(dto.getLogin().toLowerCase()).ifPresent(existingUser -> {
       boolean removed = removeNonActivatedUser(existingUser);
       if (!removed) {
@@ -102,13 +102,13 @@ public class UserService {
     authorityRepository.findById(AuthUtil.USER).ifPresent(authorities::add);
     newUser.setAuthorities(authorities);
 
-    userRepository.save(newUser);
+    newUser = userRepository.save(newUser);
     this.clearUserCaches(newUser);
 
     auditer.add(new AuditEvent(AuthUtil.getCurrentUserLogin().orElse(AuthUtil.SYSTEM_ACCOUNT), "user-created",
         MiscUtil.toMap("item", dto.toString()))); // example of custom audit event
     log.debug("Created new user: {}", newUser);
-    return true;
+    return newUser;
   }
 
   private boolean removeNonActivatedUser(User existingUser) {

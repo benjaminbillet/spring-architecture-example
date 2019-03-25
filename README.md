@@ -1,9 +1,8 @@
-# Spring Data JPA Auditing
-Spring Data provides support to keep track of who created/changed entities and when using specific annotations (see `my.app.domain.AuditedEntity`): https://docs.spring.io/spring-data/jpa/docs/2.1.5.RELEASE/reference/html/#auditing
+# Async emailing
+Spring provides [task scheduling and asynchronous tasks](https://docs.spring.io/spring/docs/5.1.5.RELEASE/spring-framework-reference/integration.html#scheduling) capabilities. We use it here to send activation emails (`my.app.service.MailService`). See `my.app.config.AsyncConfiguration` for the configuration details.
 
-Creation/modification dates as well as creator and last editor credentials are transparently stored in the entity (the identity being retrieved using `my.app.config.SpringSecurityAuditorAware`).
+# Internationalization 
+Using message sources, we build static internationalization (see `resources/i18n` folder). A `messages-{locale code}.properties` defines a set of internationalized strings for a given language. See https://docs.spring.io/spring/docs/5.1.5.RELEASE/spring-framework-reference/core.html#context-functionality-messagesource for details.
 
-# Spring Actuator Auditing
-Spring Boot Actuator introduces a flexible audit framework that publishes events (by default, "authentication success", "failure" and "access denied" exceptions): https://docs.spring.io/spring-boot/docs/2.1.3.RELEASE/reference/html/production-ready-auditing.html
-
-By default, audit events are kept in memory and accessible through `http://localhost:8080/actuator/auditevents`. By implementing a different `AuditEventRepository`, you can create a persistence mechanism for all the audit events. Here we give an example that dumps events to stdin (`my.app.config.ConsoleAuditEventRepository`).
+# Spring template
+We add [Thymeleaf](https://www.thymeleaf.org), a template engine, to the project. See Spring support of template engines: https://docs.spring.io/spring-boot/docs/2.1.3.RELEASE/reference/htmlsingle/#boot-features-spring-mvc-template-engines

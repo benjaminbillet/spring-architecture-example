@@ -2,16 +2,21 @@ package my.app.service;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.auditing.AuditingHandler;
+import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,14 +40,23 @@ public class UserServiceTest {
   @Autowired
   private CacheManager cacheManager;
 
+  @Autowired
+  private AuditingHandler auditingHandler;
+
+  @Mock
+  DateTimeProvider dateTimeProvider;
+
+
   @Test
   @Transactional
   public void testFindNotActivatedUsers() {
+    when(dateTimeProvider.getNow()).thenReturn(Optional.of(Instant.now().minus(30, ChronoUnit.DAYS)));
+    auditingHandler.setDateTimeProvider(dateTimeProvider);
+
     Instant now = Instant.now();
 
     User user = UserTestUtil.createJohnDoe(null);
     user.setActivated(false);
-    user.setCreatedDate(now.minus(6, ChronoUnit.DAYS));
     user = userRepository.saveAndFlush(user);
 
     List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
@@ -56,9 +70,11 @@ public class UserServiceTest {
   @Test
   @Transactional
   public void testRemoveNotActivatedUsers() {
+    when(dateTimeProvider.getNow()).thenReturn(Optional.of(Instant.now().minus(30, ChronoUnit.DAYS)));
+    auditingHandler.setDateTimeProvider(dateTimeProvider);
+
     User user = UserTestUtil.createJohnDoe(null);
     user.setActivated(false);
-    user.setCreatedDate(Instant.now().minus(30, ChronoUnit.DAYS));
     userRepository.saveAndFlush(user);
 
     assertThat(userRepository.findOneByLogin(UserTestUtil.JOHNDOE_LOGIN)).isPresent();

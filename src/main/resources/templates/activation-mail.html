@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title th:text="#{mail.activation.title}">Account activation</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+  <p th:text="#{mail.activation.greetings(${user.login})}">
+    Hello
+  </p>
+  <p th:text="#{mail.activation.text1}">
+    Your account has been created, which is a great news, but it also needs to be activated by clicking on the URL below:
+  </p>
+  <p>
+    <a th:with="url=(@{|${baseUrl}/activate?key=${user.activationKey}|})" th:href="${url}" th:text="${url}">
+      Activation link
+    </a>
+  </p>
+  <p>
+    <span th:text="#{mail.activation.regards}">See you soon!</span>
+    <br />
+    <em th:text="#{mail.signature}">Your application team</em>
+  </p>
+</body>
+
+</html>

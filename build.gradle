@@ -60,6 +60,12 @@ dependencies {
   // spring actuator
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+  // spring mail
+  implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+  // spring templating
+  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
   // mariadb client
   implementation 'org.mariadb.jdbc:mariadb-java-client'
 

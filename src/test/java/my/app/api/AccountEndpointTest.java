@@ -32,6 +32,7 @@ import my.app.domain.User;
 import my.app.dto.UserDto;
 import my.app.dto.UserMapper;
 import my.app.repository.UserRepository;
+import my.app.service.MailService;
 import my.app.service.UserService;
 import my.app.util.AuthUtil;
 import my.app.util.JsonUtil;
@@ -65,6 +66,9 @@ public class AccountEndpointTest {
 
   @Autowired
   private CacheManager cacheManager;
+
+  @Autowired
+  private MailService mailService;
 
   @Before
   public void setup() {
@@ -244,7 +248,7 @@ public class AccountEndpointTest {
   }
 
   private MockMvc getMockEndpoint() {
-    AccountEndpoint endpoint = new AccountEndpoint(config, userService);
+    AccountEndpoint endpoint = new AccountEndpoint(config, userService, mailService);
     return MockMvcBuilders.standaloneSetup(endpoint)
       .setCustomArgumentResolvers(pageableArgumentResolver)
       .setControllerAdvice(exceptionTranslator)

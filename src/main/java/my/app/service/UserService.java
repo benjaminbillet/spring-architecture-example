@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.actuate.audit.AuditEvent;
+import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +27,7 @@ import my.app.dto.UserMapper;
 import my.app.repository.AuthorityRepository;
 import my.app.repository.UserRepository;
 import my.app.util.AuthUtil;
+import my.app.util.MiscUtil;
 
 @Service
 @Transactional
@@ -44,14 +47,19 @@ public class UserService {
 
   private final CacheManager cacheManager;
 
+  private final AuditEventRepository auditer;
+
+
   public UserService(ApplicationProperties config, UserRepository userRepository, UserMapper userMapper,
-      AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder, CacheManager cacheManager) {
+      AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder, CacheManager cacheManager,
+      AuditEventRepository auditer) {
     this.config = config;
     this.userRepository = userRepository;
     this.userMapper = userMapper;
     this.passwordEncoder = passwordEncoder;
     this.authorityRepository = authorityRepository;
     this.cacheManager = cacheManager;
+    this.auditer = auditer;
   }
 
   public boolean activateRegistration(String key) {
@@ -96,6 +104,9 @@ public class UserService {
 
     userRepository.save(newUser);
     this.clearUserCaches(newUser);
+
+    auditer.add(new AuditEvent(AuthUtil.getCurrentUserLogin().orElse(AuthUtil.SYSTEM_ACCOUNT), "user-created",
+        MiscUtil.toMap("item", dto.toString()))); // example of custom audit event
     log.debug("Created new user: {}", newUser);
     return true;
   }

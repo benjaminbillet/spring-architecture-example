@@ -99,6 +99,9 @@ dependencies {
   // monitoring
   implementation 'io.micrometer:micrometer-registry-prometheus'
 
+  // auditing
+  implementation "org.hibernate:hibernate-envers"
+
   // testing
   testCompile 'org.springframework.boot:spring-boot-starter-test'
   testCompile 'org.springframework.security:spring-security-test'

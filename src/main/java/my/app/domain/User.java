@@ -1,7 +1,6 @@
 package my.app.domain;
 
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
@@ -27,7 +26,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.annotation.CreatedDate;
 
 import my.app.util.AuthUtil;
 
@@ -35,17 +33,12 @@ import my.app.util.AuthUtil;
 @Entity
 @Table(name = "user")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class User implements Serializable {
+public class User extends AuditedEntity implements Serializable {
   private static final long serialVersionUID = -1754695280400533216L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @CreatedDate
-  @Column(name = "created_date", updatable = false)
-  @JsonIgnore
-  private Instant createdDate = Instant.now();
 
   @NotNull
   @Pattern(regexp = AuthUtil.LOGIN_REGEX)
@@ -96,14 +89,6 @@ public class User implements Serializable {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public Instant getCreatedDate() {
-    return createdDate;
-  }
-
-  public void setCreatedDate(Instant createdDate) {
-    this.createdDate = createdDate;
   }
 
   public String getLogin() {
@@ -193,6 +178,7 @@ public class User implements Serializable {
     return "{" +
       " id='" + getId() + "'" +
       ", createdDate='" + getCreatedDate() + "'" +
+      ", lastModifiedDate='" + getLastModifiedDate() + "'" +
       ", login='" + getLogin() + "'" +
       ", firstName='" + getFirstName() + "'" +
       ", lastName='" + getLastName() + "'" +

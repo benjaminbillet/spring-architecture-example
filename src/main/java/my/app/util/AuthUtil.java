@@ -21,6 +21,8 @@ public final class AuthUtil {
   public static final String USER = "ROLE_USER";
   public static final String ANONYMOUS = "ROLE_ANONYMOUS";
 
+  public static final String SYSTEM_ACCOUNT = "system";
+
   public static String generatePassword() {
     return RandomStringUtils.randomAlphanumeric(KEY_SIZE);
   }
@@ -40,8 +42,6 @@ public final class AuthUtil {
       if (authentication.getPrincipal() instanceof UserDetails) {
         UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
         return springSecurityUser.getUsername();
-      } else if (authentication.getPrincipal() instanceof String) {
-        return (String) authentication.getPrincipal();
       }
       return null;
     });

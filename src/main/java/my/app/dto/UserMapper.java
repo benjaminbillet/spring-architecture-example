@@ -15,6 +15,9 @@ public interface UserMapper extends EntityMapper<UserDto, User> {
   UserDto toDto(User user);
 
   @Mapping(target = "createdDate", ignore = true)
+  @Mapping(target = "lastModifiedDate", ignore = true)
+  @Mapping(target = "createdBy", ignore = true)
+  @Mapping(target = "lastModifiedBy", ignore = true)
   @Mapping(target = "password", ignore = true)
   @Mapping(target = "activationKey", ignore = true)
   @Mapping(target = "id", ignore = true)

@@ -111,6 +111,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/api/public/**").permitAll()
       // protect the metrics and health endpoints
       .antMatchers("/actuator/prometheus").hasIpAddress("127.0.0.1")
+      .antMatchers("/actuator/auditevents").hasIpAddress("127.0.0.1")
       .antMatchers("/actuator/**").hasAuthority(AuthUtil.ADMIN)
     .and()
       .apply(new JwtConfiguration(tokenProvider));

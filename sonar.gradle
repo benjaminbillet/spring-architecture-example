@@ -15,7 +15,7 @@ sonarqube {
   properties {
     property "sonar.host.url", "http://localhost:9000"
 
-    property "sonar.issue.ignore.multicriteria", "S00112,S1948,MaximumInheritanceDepth"
+    property "sonar.issue.ignore.multicriteria", "S00112,S1948,S1700,MaximumInheritanceDepth"
 
     // disable Generic exceptions should never be thrown
     property "sonar.issue.ignore.multicriteria.S00112.resourceKey", "src/main/java/**/*"
@@ -28,6 +28,11 @@ sonarqube {
     property "sonar.issue.ignore.multicriteria.MaximumInheritanceDepth.resourceKey", "src/main/java/**/*"
     property "sonar.issue.ignore.multicriteria.MaximumInheritanceDepth.ruleKey", "squid:MaximumInheritanceDepth"
 
+    // disable Fields in a "Serializable" class should either be transient or serializable (a JPA-managed field cannot be transient)
+    property "sonar.issue.ignore.multicriteria.S1700.resourceKey", "src/main/java/**/*"
+    property "sonar.issue.ignore.multicriteria.S1700.ruleKey", "squid:S1700"
+
+
     property "sonar.sources", "${project.projectDir}/src/main/"
     property "sonar.tests", "${project.projectDir}/src/test/"
 
@@ -36,6 +41,5 @@ sonarqube {
     property "sonar.jacoco.reportPaths", "${project.buildDir}/jacoco/test.exec"
     property "sonar.java.codeCoveragePlugin", "jacoco"
     property "sonar.junit.reportPaths", "${project.buildDir}/test-results"
-
   }
 }

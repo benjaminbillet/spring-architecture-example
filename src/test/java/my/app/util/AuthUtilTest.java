@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 // a test for various authentication utilities
 public class AuthUtilTest {
@@ -53,10 +54,11 @@ public class AuthUtilTest {
     SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
     if (authority != null) {
       Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(authority));
-      securityContext
-          .setAuthentication(new UsernamePasswordAuthenticationToken("principal", "credentials", authorities));
+      UserDetails details = new org.springframework.security.core.userdetails.User("principal", "credentials", authorities);
+      securityContext.setAuthentication(new UsernamePasswordAuthenticationToken(details, "credentials", authorities));
     } else {
-      securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("principal", "credentials"));
+      UserDetails details = new org.springframework.security.core.userdetails.User("principal", "credentials", Collections.emptyList());
+      securityContext.setAuthentication(new UsernamePasswordAuthenticationToken(details, "credentials"));
     }
     SecurityContextHolder.setContext(securityContext);
   }

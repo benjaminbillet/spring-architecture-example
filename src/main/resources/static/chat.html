@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>WebSocket chat</title>
+  <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/webjars/jquery/jquery.min.js"></script>
+  <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+  <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+  <script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
+  <script src="./chat.js"></script>
+</head>
+
+<body>
+  <noscript>
+    <h2>
+      Seems your browser does not support Javascript. Please enable Javascript and reload this page to use Websockets.
+    </h2>
+  </noscript>
+  <div id="main-content" class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="login">Login</label>
+            <input type="text" id="login" class="form-control" placeholder="Your login here...">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Your password here...">
+          </div>
+          <button id="connect" class="btn btn-default" type="submit">Connect</button>
+          <button id="disconnect" class="btn btn-default" type="submit">Disconnect</button>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <table id="conversation" class="table table-striped">
+          <thead>
+            <tr>
+              <th>Chat</th>
+            </tr>
+          </thead>
+          <tbody id="chat">
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <form class="form-inline">
+        <input type="text" id="message" class="form-control" placeholder="What would you like to say?">
+        <button id="send" class="btn btn-default" type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>

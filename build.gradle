@@ -8,7 +8,7 @@ plugins {
 // apply the tasks defined in the java plugin
 apply plugin: 'java'
 
-// apply the spring/spring boot plugins 
+// apply the spring/spring boot plugins
 // (the io.spring.dependency-management plugin is a dependency of the org.springframework.boot plugin)
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -69,6 +69,16 @@ dependencies {
   // mariadb client
   implementation 'org.mariadb.jdbc:mariadb-java-client'
 
+  // websocket support + web libraries
+  implementation 'org.springframework.boot:spring-boot-starter-websocket'
+  implementation 'org.springframework.security:spring-security-messaging'
+  implementation 'org.webjars:webjars-locator-core'
+  implementation 'org.webjars:sockjs-client:1.0.2'
+  implementation 'org.webjars:stomp-websocket:2.3.3'
+  implementation 'org.webjars:bootstrap:3.3.7'
+  implementation 'org.webjars:jquery:3.1.0'
+  implementation 'org.webjars.bower:axios:0.17.1'
+
   // caching
   implementation 'javax.cache:cache-api'
   implementation 'org.ehcache:ehcache'
@@ -88,7 +98,7 @@ dependencies {
 
   // Hibernate JPA Model generator
   annotationProcessor 'javax.xml.bind:jaxb-api' // https://stackoverflow.com/a/52835834
-  annotationProcessor 'org.hibernate:hibernate-jpamodelgen'  
+  annotationProcessor 'org.hibernate:hibernate-jpamodelgen'
 
   // https://tools.ietf.org/html/rfc7807 implementation
   implementation "org.zalando:problem-spring-web:${problemSpringWebVersion}"

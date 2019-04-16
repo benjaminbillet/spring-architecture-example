@@ -16,6 +16,8 @@ import org.springframework.web.filter.GenericFilterBean;
 
 // filter for incoming requests that catches the Authorization header to fill the spring security context
 public class JwtFilter extends GenericFilterBean {
+  public static final String TOKEN_QUERY_PARAM = "access_token";
+
   private final JwtTokenProvider tokenProvider;
 
   public JwtFilter(JwtTokenProvider tokenProvider) {
@@ -37,8 +39,14 @@ public class JwtFilter extends GenericFilterBean {
 
   private String resolveToken(HttpServletRequest request) {
     String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (!StringUtils.isBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
+    // for HTTP header authentication
+    if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
       return bearerToken.substring(7);
+    }
+    // for URL parameter authentication (used by websockets)
+    String queryToken = request.getParameter(TOKEN_QUERY_PARAM);
+    if (StringUtils.isNotBlank(queryToken)) {
+      return queryToken;
     }
     return null;
   }
